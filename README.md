@@ -1,2 +1,0 @@
-# SpotinU-Server
-SpotinU Backend
