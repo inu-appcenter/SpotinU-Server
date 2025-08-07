@@ -1,0 +1,43 @@
+# dev
+
+services:
+  spotinu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spotinu-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  mysql:
+    hostname: mysql
+    container_name: spotinu-mysql
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - spotinu-mysql:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "--silent" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    networks:
+      - app-network
+
+volumes:
+  spotinu-mysql:
+
+networks:
+  app-network:
+    driver: bridge
