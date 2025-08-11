@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import kr.inuappcenter.spotinu.domain.favorite.entity.Favorite;
 import kr.inuappcenter.spotinu.domain.review.entity.Review;
 import kr.inuappcenter.spotinu.global.entity.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,4 +34,12 @@ public class Member extends BaseEntity {
 
   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL , orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Favorite> favorites = new ArrayList<>();
+
+  @Builder
+  public Member(String name, Long studentNumber, String password, Role role) {
+    this.name = name;
+    this.studentNumber = studentNumber;
+    this.password = password;
+    this.role = role;
+  }
 }
