@@ -42,4 +42,21 @@ public class Member extends BaseEntity {
     this.password = password;
     this.role = role;
   }
+
+  /**
+   * 도메인 규칙 적용한 정적 팩토리 메서드
+   */
+  public static Member create(String name, Long studentNumber, String encodedPassword, Role role) {
+    return Member.builder()
+      .name(name)
+      .studentNumber(studentNumber)
+      .password(encodedPassword)
+      .role(role != null ? role : Role.USER) // 기본값 설정
+      .build();
+  }
+
+  // 비밀번호 변경용 도메인 메서드 (필요 시에만)
+  public void changePassword(String encodedPassword) {
+    this.password = encodedPassword;
+  }
 }

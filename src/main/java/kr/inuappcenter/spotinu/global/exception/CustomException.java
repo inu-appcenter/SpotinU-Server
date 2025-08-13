@@ -18,4 +18,14 @@ public class CustomException extends RuntimeException {
     this.baseErrorCode = baseErrorCode;
     this.timestamp = LocalDateTime.now();
   }
+
+  public CustomException(BaseErrorCode baseErrorCode, Throwable cause) {
+    super(baseErrorCode.getMessage(), cause);
+    this.baseErrorCode = baseErrorCode;
+    this.timestamp = LocalDateTime.now();
+  }
+
+  public BaseErrorCode getErrorCode() { // 편의 메서드
+    return this.baseErrorCode;
+  }
 }

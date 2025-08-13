@@ -5,6 +5,7 @@ import kr.inuappcenter.spotinu.domain.auth.dto.request.SignupRequestDto;
 import kr.inuappcenter.spotinu.domain.member.entity.CustomUserDetails;
 import kr.inuappcenter.spotinu.domain.member.entity.Member;
 import kr.inuappcenter.spotinu.domain.member.exception.MemberException;
+import kr.inuappcenter.spotinu.domain.member.mapper.MemberMapper;
 import kr.inuappcenter.spotinu.domain.member.repository.MemberRepository;
 import kr.inuappcenter.spotinu.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -21,22 +22,22 @@ import static kr.inuappcenter.spotinu.domain.member.exception.MemberErrorCode.US
 @Transactional
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
   private final MemberRepository memberRepository;
   private final AuthenticationManager authenticationManager;
   private final JwtTokenProvider jwtTokenProvider;
   private final PasswordEncoder passwordEncoder;
+  private final MemberMapper memberMapper;
 
   @Override
   public void signUp(SignupRequestDto requestDto) {
 
     validateStudentNumber(requestDto.getStudentNumber());
-    memberRepository.save(
-      Member.builder()
-        .name(requestDto.getName())
-        .studentNumber(requestDto.getStudentNumber())
-        .password(passwordEncoder.encode(requestDto.getPassword()))
-        .role(requestDto.getRole())
-      .build());
+
+    String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+
+    Member member = memberMapper.toEntityWithEncodedPassword(requestDto, encodedPassword);
+    memberRepository.save(member);
   }
 
   @Override
@@ -57,8 +58,9 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public void delete(Long id) {
-    // TODO: 해당 id 값을 가진 유저가 있는지 검증
-    memberRepository.deleteById(id);
+    Member member = memberRepository.findById(id)
+      .orElseThrow(() -> new MemberException(USER_NOT_FOUND));
+    memberRepository.delete(member);
   }
 
   @Override
