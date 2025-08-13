@@ -2,8 +2,15 @@ package kr.inuappcenter.spotinu.domain.review.entity;
 
 import jakarta.persistence.*;
 import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ReviewPhoto {
 
   @Id
