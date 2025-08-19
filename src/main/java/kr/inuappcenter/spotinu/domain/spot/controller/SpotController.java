@@ -1,9 +1,7 @@
 package kr.inuappcenter.spotinu.domain.spot.controller;
 
 import kr.inuappcenter.spotinu.domain.member.entity.CustomUserDetails;
-import kr.inuappcenter.spotinu.domain.member.entity.Role;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotCreateRequest;
-import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotDeleteRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotFilterRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDetailResponse;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotResponse;
@@ -62,8 +60,8 @@ public class SpotController implements SpotControllerSpecification {
   }
 
   @Override
-  public ResponseEntity<ResponseDto<Void>> delete(CustomUserDetails userDetails, SpotDeleteRequest spotDeleteRequest) {
-    spotService.delete(spotDeleteRequest.getId());
+  public ResponseEntity<ResponseDto<Void>> delete(CustomUserDetails userDetails, Long spotId) {
+    spotService.delete(spotId);
     return ResponseEntity
       .status(HttpStatus.NO_CONTENT)
       .body(ResponseDto.success("Spot deleted successfully"));

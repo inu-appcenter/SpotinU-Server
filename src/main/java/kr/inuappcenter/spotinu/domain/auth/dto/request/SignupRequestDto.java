@@ -3,9 +3,7 @@ package kr.inuappcenter.spotinu.domain.auth.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import kr.inuappcenter.spotinu.domain.member.entity.Role;
 import lombok.Getter;
 
@@ -19,6 +17,8 @@ public class SignupRequestDto {
 
   @Schema(description = "학번", example = "202012345")
   @NotNull(message = "학번 입력은 필수입니다.")
+  @Min(value = 100000000, message = "학번은 9자리 숫자여야 합니다.")
+  @Max(value = 999999999, message = "학번은 9자리 숫자여야 합니다.")
   private Long studentNumber;
 
   @Schema(description = "비밀번호", example = "qwerqwer1@")
@@ -27,7 +27,7 @@ public class SignupRequestDto {
   @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
   private String password;
 
-  @Schema(description = "사용자/어드민", example = "USER/ADMIN")
+  @Schema(description = "사용자/관리자", example = "USER/ADMIN")
   @Enumerated(EnumType.STRING)
   private Role role;
 }

@@ -1,7 +1,10 @@
 package kr.inuappcenter.spotinu.domain.review.mapper;
 
+import kr.inuappcenter.spotinu.domain.member.entity.Member;
+import kr.inuappcenter.spotinu.domain.review.dto.request.ReviewCreateRequest;
 import kr.inuappcenter.spotinu.domain.review.dto.response.ReviewResponse;
 import kr.inuappcenter.spotinu.domain.review.entity.Review;
+import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,4 +17,6 @@ public interface ReviewMapper {
   ReviewResponse toReviewResponse(Review review);
 
   List<ReviewResponse> toReviewResponses(List<Review> reviews);
+
+  Review toEntity(Member member, Spot spot, ReviewCreateRequest request);
 }

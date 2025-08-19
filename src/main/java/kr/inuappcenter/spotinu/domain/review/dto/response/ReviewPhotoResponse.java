@@ -8,6 +8,7 @@ import lombok.*;
 @Builder
 public class ReviewPhotoResponse {
 
+  Long id;
   private String url;
   private boolean thumbnail;
   private int orderIndex;

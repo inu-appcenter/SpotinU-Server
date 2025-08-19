@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.inuappcenter.spotinu.domain.member.entity.CustomUserDetails;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotCreateRequest;
-import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotDeleteRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotFilterRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDetailResponse;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotResponse;
@@ -73,5 +72,5 @@ public interface SpotControllerSpecification {
   @PreAuthorize("hasRole('ADMIN')")
   ResponseEntity<ResponseDto<Void>> delete(
     @AuthenticationPrincipal CustomUserDetails userDetails,
-    @RequestBody @Valid SpotDeleteRequest spotDeleteRequest);
+    @PathVariable Long spotId);
 }

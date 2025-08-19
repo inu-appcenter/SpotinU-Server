@@ -3,6 +3,7 @@ package kr.inuappcenter.spotinu.domain.review.entity;
 import jakarta.persistence.*;
 import kr.inuappcenter.spotinu.domain.member.entity.Member;
 import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
+import kr.inuappcenter.spotinu.domain.spot.entity.SpotPhoto;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -53,4 +54,18 @@ public class Review {
   @Enumerated(EnumType.STRING)
   private Set<SpotKeyword> keywords = new HashSet<>();
 
+  @Builder
+  public Review(Member member, Spot spot, String content, LocalDate visitDate, LocalTime visitTime, Set<SpotKeyword> keywords) {
+    this.member = member;
+    this.spot = spot;
+    this.content = content;
+    this.visitDate = visitDate;
+    this.visitTime = visitTime;
+    this.keywords = keywords;
+  }
+
+  public void addPhoto(ReviewPhoto photo) {
+    this.photos.add(photo);
+    photo.setReview(this);  // SpotPhoto 쪽 연관관계 설정 (반대편)
+  }
 }
