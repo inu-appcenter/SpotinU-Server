@@ -14,6 +14,7 @@ import java.util.Set;
 @Builder
 public class ReviewResponse {
 
+  private Long id;
   private String memberName;
   private List<ReviewPhotoResponse> photos;
   private String content;

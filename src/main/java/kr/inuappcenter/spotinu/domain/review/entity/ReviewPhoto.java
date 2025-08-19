@@ -1,11 +1,7 @@
 package kr.inuappcenter.spotinu.domain.review.entity;
 
 import jakarta.persistence.*;
-import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -19,11 +15,19 @@ public class ReviewPhoto {
 
   private String url;
 
-  private boolean isThumbnail;
+  private boolean thumbnail;
 
   private int orderIndex;
 
+  @Setter
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "review_id")
   private Review review;
+
+  @Builder
+  public ReviewPhoto(String url, boolean thumbnail, int orderIndex) {
+    this.url = url;
+    this.thumbnail = thumbnail;
+    this.orderIndex = orderIndex;
+  }
 }
