@@ -11,6 +11,14 @@ import lombok.Getter;
 @Schema(description = "장소 등록 DTO")
 public class SpotCreateRequest {
 
+  @Schema(description = "장소 x좌표", example = "1")
+  @NotBlank(message = "장소 x좌표는 필수 입력 값입니다.")
+  private String x;
+
+  @Schema(description = "장소 y좌표", example = "1")
+  @NotBlank(message = "장소 y좌표는 필수 입력 값입니다.")
+  private String y;
+
   @Schema(description = "장소 이름", example = "이룸관")
   @NotBlank(message = "이름은 필수 입력 값입니다.")
   private String name;
