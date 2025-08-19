@@ -20,6 +20,9 @@ public class Spot {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private String x;
+  private String y;
+
   private String name;
 
   private String locationDetail;  // XX호관 XXX호
@@ -52,6 +55,8 @@ public class Spot {
 
   @Builder
   public Spot(
+    String x,
+    String y,
     String name,
     String locationDetail,
     String description,
@@ -66,6 +71,8 @@ public class Spot {
     String businessHoursDetail,
     String descriptionDetail
   ) {
+    this.x = x;
+    this.y = y;
     this.name = name;
     this.locationDetail = locationDetail;
     this.description = description;
