@@ -16,5 +16,5 @@ public class SpotResponse {
   private String name;
   private String locationDetail;
   private String description;
-  private List<SpotPhotoResponse> photos;
+  private String photo;
 }
