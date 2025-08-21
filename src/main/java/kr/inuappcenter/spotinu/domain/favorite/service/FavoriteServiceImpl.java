@@ -82,6 +82,7 @@ public class FavoriteServiceImpl implements FavoriteService {
    * Repository 에서 조회 -> 어디 repo? -> favorite
    */
   @Override
+  @Transactional(readOnly = true)
   public Page<FavoriteDetailResponse> getMyFavoriteDetail(CustomUserDetails userDetails, SpotIdsRequest spotIdsRequest, int page, int size) {
 
     Long memberId = userDetails.getId();
