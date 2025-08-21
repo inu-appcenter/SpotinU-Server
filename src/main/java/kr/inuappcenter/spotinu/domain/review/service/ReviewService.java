@@ -37,10 +37,16 @@ public interface ReviewService {
    * 후기 조회(내가 쓴)
    * @param memberId
    */
-  Page<ReviewResponse> getMyReviews(Long memberId, int page, int size);
+  Page<ReviewResponse> getMyReviews(Long memberId,
+                                    int page,
+                                    int size
+  );
 
   /**
    * Spot 후기 조회
    */
-  Page<ReviewResponse> getReviews(Long spotId, int page, int size);
+  Page<ReviewResponse> getReviews(Long spotId,
+                                  int page,
+                                  int size
+  );
 }

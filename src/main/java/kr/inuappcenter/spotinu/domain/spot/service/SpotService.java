@@ -4,6 +4,7 @@ import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotCreateRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotFilterRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDetailResponse;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotResponse;
+import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,5 +56,7 @@ public interface SpotService {
    * @param spotId
    */
   void delete(Long spotId);
+
+  Spot getSpotProxy(Long spotId);
 
 }

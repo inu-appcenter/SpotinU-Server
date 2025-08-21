@@ -72,6 +72,10 @@ public class SecurityConfig {
           "/api/v1/posts/**"
         ).authenticated()
 
+        .requestMatchers(
+          "/api/v1/favorites/**"
+        ).authenticated()
+
         .anyRequest().authenticated()
       );
     return http.build();

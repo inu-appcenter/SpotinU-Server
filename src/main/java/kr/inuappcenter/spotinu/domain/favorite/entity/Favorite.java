@@ -3,10 +3,7 @@ package kr.inuappcenter.spotinu.domain.favorite.entity;
 import jakarta.persistence.*;
 import kr.inuappcenter.spotinu.domain.member.entity.Member;
 import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -18,6 +15,8 @@ public class Favorite {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private String memo;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
@@ -25,4 +24,11 @@ public class Favorite {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "spot_id", nullable = false)
   private Spot spot;
+
+  @Builder
+  public Favorite(String memo, Member member, Spot spot) {
+    this.memo = memo;
+    this.member = member;
+    this.spot = spot;
+  }
 }

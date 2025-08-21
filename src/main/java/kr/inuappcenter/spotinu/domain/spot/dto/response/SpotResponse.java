@@ -11,12 +11,10 @@ import java.util.List;
 public class SpotResponse {
 
   private Long id;
-  private String x;
-  private String y;
+  private String latitude;
+  private String longitude;
   private String name;
   private String locationDetail;
   private String description;
-  private String businessHours;
   private List<SpotPhotoResponse> photos;
-
 }

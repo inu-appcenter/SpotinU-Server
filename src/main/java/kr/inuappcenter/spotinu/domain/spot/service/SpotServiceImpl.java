@@ -134,4 +134,10 @@ public class SpotServiceImpl implements SpotService {
     spotRepository.delete(spot);
     log.info("Spot deleted successfully: {}", spot.getName());
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Spot getSpotProxy(Long spotId) {
+    return spotRepository.getReferenceById(spotId); // DB 조회는 실제로 필드 접근할 때 발생
+  }
 }

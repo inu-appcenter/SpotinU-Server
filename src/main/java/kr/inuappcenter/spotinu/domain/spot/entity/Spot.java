@@ -20,8 +20,8 @@ public class Spot {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String x;
-  private String y;
+  private String latitude;  // 위도
+  private String longitude; // 경도
 
   private String name;
 
@@ -55,8 +55,8 @@ public class Spot {
 
   @Builder
   public Spot(
-    String x,
-    String y,
+    String latitude,
+    String longitude,
     String name,
     String locationDetail,
     String description,
@@ -71,8 +71,8 @@ public class Spot {
     String businessHoursDetail,
     String descriptionDetail
   ) {
-    this.x = x;
-    this.y = y;
+    this.latitude = latitude;
+    this.longitude = longitude;
     this.name = name;
     this.locationDetail = locationDetail;
     this.description = description;
