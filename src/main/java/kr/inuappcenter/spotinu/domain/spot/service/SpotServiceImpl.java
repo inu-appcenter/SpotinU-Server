@@ -49,25 +49,25 @@ public class SpotServiceImpl implements SpotService {
     return spots.map(spotMapper::toResponse);
   }
 
-  @Override
-  @Transactional(readOnly = true)
-  public Page<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest, int page, int size) {
-
-    log.info("Searching spots with filters {} - page: {}, size: {}", spotFilterRequest, page, size);
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Spot> spots = spotRepository.searchSpots(
-      spotFilterRequest.getSleepingAllowed(),
-      spotFilterRequest.getEatingAllowed(),
-      spotFilterRequest.getHasPowerOutlet(),
-      spotFilterRequest.getStudyAllowed(),
-      spotFilterRequest.getEntertainment(),
-      spotFilterRequest.getReservationRequired(),
-      spotFilterRequest.getPlaceType(),
-      pageable
-      );
-    log.info("Search returned {} spots", spots.getNumberOfElements());
-    return spots.map(spotMapper::toResponse);
-  }
+//  @Override
+//  @Transactional(readOnly = true)
+//  public Page<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest, int page, int size) {
+//
+//    log.info("Searching spots with filters {} - page: {}, size: {}", spotFilterRequest, page, size);
+//    Pageable pageable = PageRequest.of(page, size);
+//    Page<Spot> spots = spotRepository.searchSpots(
+//      spotFilterRequest.getSleepingAllowed(),
+//      spotFilterRequest.getEatingAllowed(),
+//      spotFilterRequest.getHasPowerOutlet(),
+//      spotFilterRequest.getStudyAllowed(),
+//      spotFilterRequest.getEntertainment(),
+//      spotFilterRequest.getReservationRequired(),
+//      spotFilterRequest.getPlaceType(),
+//      pageable
+//      );
+//    log.info("Search returned {} spots", spots.getNumberOfElements());
+//    return spots.map(spotMapper::toResponse);
+//  }
 
   @Override
   @Transactional(readOnly = true)

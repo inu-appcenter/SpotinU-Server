@@ -22,16 +22,16 @@ public interface SpotService {
                                  int size
   );
 
-  /**
-   * 장소 검색(필터)
-   * @param spotFilterRequest
-   * @param page
-   * @param size
-   * @return
-   */
-  Page<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest,
-                                 int page, int size
-  );
+//  /**
+//   * 장소 검색(필터)
+//   * @param spotFilterRequest
+//   * @param page
+//   * @param size
+//   * @return
+//   */
+//  Page<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest,
+//                                 int page, int size
+//  );
 
   /**
    * 장소 세부 조회
