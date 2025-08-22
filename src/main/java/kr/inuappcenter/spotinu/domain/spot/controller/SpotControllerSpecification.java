@@ -30,14 +30,14 @@ public interface SpotControllerSpecification {
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size);
 
-  /**
-   * 필터 조건으로 장소 검색
-   */
-  @PostMapping("/search")
-  ResponseEntity<ResponseDto<Page<SpotResponse>>> searchSpots(
-    @Valid @RequestBody SpotFilterRequest spotFilterRequest,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size);
+//  /**
+//   * 필터 조건으로 장소 검색
+//   */
+//  @PostMapping("/search")
+//  ResponseEntity<ResponseDto<Page<SpotResponse>>> searchSpots(
+//    @Valid @RequestBody SpotFilterRequest spotFilterRequest,
+//    @RequestParam(defaultValue = "0") int page,
+//    @RequestParam(defaultValue = "10") int size);
 
   /**
    * 특정 장소 상세 조회

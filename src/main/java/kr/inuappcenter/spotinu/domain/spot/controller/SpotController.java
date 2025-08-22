@@ -29,12 +29,12 @@ public class SpotController implements SpotControllerSpecification {
       .ok(ResponseDto.success(spotResponses));
   }
 
-  @Override
-  public ResponseEntity<ResponseDto<Page<SpotResponse>>> searchSpots(SpotFilterRequest spotFilterRequest, int page, int size) {
-    Page<SpotResponse> spotResponses = spotService.searchSpots(spotFilterRequest, page, size);
-    return ResponseEntity
-      .ok(ResponseDto.success(spotResponses));
-  }
+//  @Override
+//  public ResponseEntity<ResponseDto<Page<SpotResponse>>> searchSpots(SpotFilterRequest spotFilterRequest, int page, int size) {
+//    Page<SpotResponse> spotResponses = spotService.searchSpots(spotFilterRequest, page, size);
+//    return ResponseEntity
+//      .ok(ResponseDto.success(spotResponses));
+//  }
 
   @Override
   public ResponseEntity<ResponseDto<SpotDetailResponse>> getSpotDetail(Long spotId) {
