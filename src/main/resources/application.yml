@@ -20,16 +20,24 @@ spring:
       max-file-size: 5MB
       max-request-size: 20MB
   jpa:
+    open-in-view: false
     properties:
-      hibernate.hibernate.show_sql: true
-      hibernate.hibernate.format_sql: true
+      hibernate:
+        format_sql: true # 보기 좋게 포맷팅
+        generate_statistics: true # 쿼리 성능 분석 (dev용)
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create-drop # 운영에서는 none 또는 validate로 변경
     database-platform: org.hibernate.dialect.MySQLDialect
   datasource:
     url: ${MYSQL_URL}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 springdoc:
   api-docs:
@@ -37,12 +45,23 @@ springdoc:
     enabled: true
   swagger-ui.path: /swagger-ui/index.html
 
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+      multiline: true      # SQL 포맷팅
+      logging: slf4j       # 로그 프레임워크(SLF4J) 사용
 jwt:
   expiration: 86400000
   secret: ${JWT_SECRET}
 
 logging:
   level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace # Hibernate 6.x 바인딩 값 로그
+    org.hibernate.stat: warn # 실행 시간 및 통계 (dev용)
+    org.springframework.cache: debug
+    org.springframework.data.redis.cache: debug
     root: INFO
 
 cloud:

@@ -3,8 +3,10 @@ package kr.inuappcenter.spotinu.domain.spot.service;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotCreateRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotFilterRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDetailResponse;
+import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDownLoadResponse;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotResponse;
 import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
+import kr.inuappcenter.spotinu.global.response.PageResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,20 +20,20 @@ public interface SpotService {
    * @param size
    * @return
    */
-  Page<SpotResponse> getAllSpots(int page,
+  PageResponseDto<SpotResponse> getAllSpots(int page,
                                  int size
   );
 
-//  /**
-//   * 장소 검색(필터)
-//   * @param spotFilterRequest
-//   * @param page
-//   * @param size
-//   * @return
-//   */
-//  Page<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest,
-//                                 int page, int size
-//  );
+  /**
+   * 장소 검색(필터)
+   * @param spotFilterRequest
+   * @param page
+   * @param size
+   * @return
+   */
+  PageResponseDto<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest,
+                                 int page, int size
+  );
 
   /**
    * 장소 세부 조회
@@ -57,6 +59,12 @@ public interface SpotService {
    */
   void delete(Long spotId);
 
-  Spot getSpotProxy(Long spotId);
+  /**
+   * 장소 다운로드 - 로컬 캐시
+   * @return
+   */
+  List<SpotDownLoadResponse> downloadAllSpots();
 
+  Spot getSpotProxy(Long spotId);
+  String generateETag(List<SpotDownLoadResponse> spots);
 }

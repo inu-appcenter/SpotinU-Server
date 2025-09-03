@@ -7,25 +7,28 @@ services:
       dockerfile: Dockerfile
     container_name: spotinu-backend
     ports:
-      - "8080:8080"
+      - 8080:8080
     env_file:
       - .env
     depends_on:
       mysql:
         condition: service_healthy
+      redis:
+        condition: service_started
     networks:
       - app-network
+    restart: always
 
   mysql:
     hostname: mysql
     container_name: spotinu-mysql
     image: mysql:latest
     ports:
-      - "3306:3306"
+      - 3306:3306
     env_file:
       - .env
     volumes:
-      - spotinu-mysql:/var/lib/mysql
+      - mysql_volume_data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "--silent" ]
       interval: 10s
@@ -35,8 +38,36 @@ services:
     networks:
       - app-network
 
+  redis:
+    hostname: redis
+    image: redis:7.4.2-alpine
+    container_name: spotinu-redis
+    ports:
+      - 6379:6379
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    networks:
+      - app-network
+    volumes:
+      - ./infra/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis_volume_data:/data
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: spotinu-redisinsight
+    ports:
+      - 5540:5540
+    networks:
+      - app-network
+    depends_on:
+      - redis
+    volumes:
+      - redis_insight_volume_data:/db
+    restart: always
+
 volumes:
-  spotinu-mysql:
+  mysql_volume_data:
+  redis_volume_data:
+  redis_insight_volume_data:
 
 networks:
   app-network:

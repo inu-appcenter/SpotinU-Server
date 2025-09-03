@@ -7,14 +7,18 @@ import kr.inuappcenter.spotinu.domain.review.mapper.ReviewMapper;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotCreateRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotFilterRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDetailResponse;
+import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDownLoadResponse;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotResponse;
 import kr.inuappcenter.spotinu.domain.spot.entity.Spot;
 import kr.inuappcenter.spotinu.domain.spot.entity.SpotPhoto;
 import kr.inuappcenter.spotinu.domain.spot.exception.SpotException;
 import kr.inuappcenter.spotinu.domain.spot.mapper.SpotMapper;
 import kr.inuappcenter.spotinu.domain.spot.repository.SpotRepository;
+import kr.inuappcenter.spotinu.global.response.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,34 +44,51 @@ public class SpotServiceImpl implements SpotService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<SpotResponse> getAllSpots(int page, int size) {
+  @Cacheable(
+    value = "spots",
+    key = "'page_'+#page+'_size_'+#size",
+    cacheManager = "cacheManager"
+  )
+  public PageResponseDto<SpotResponse> getAllSpots(int page, int size) {
 
     log.info("Fetching all spots - page: {}, size: {}", page, size);
     Pageable pageable = PageRequest.of(page, size);
     Page<Spot> spots = spotRepository.findAll(pageable);
     log.info("Fetched {} spots", spots.getNumberOfElements());
-    return spots.map(spotMapper::toResponse);
+    return PageResponseDto.from(spots.map(spotMapper::toResponse));
   }
 
-//  @Override
-//  @Transactional(readOnly = true)
-//  public Page<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest, int page, int size) {
-//
-//    log.info("Searching spots with filters {} - page: {}, size: {}", spotFilterRequest, page, size);
-//    Pageable pageable = PageRequest.of(page, size);
-//    Page<Spot> spots = spotRepository.searchSpots(
-//      spotFilterRequest.getSleepingAllowed(),
-//      spotFilterRequest.getEatingAllowed(),
-//      spotFilterRequest.getHasPowerOutlet(),
-//      spotFilterRequest.getStudyAllowed(),
-//      spotFilterRequest.getEntertainment(),
-//      spotFilterRequest.getReservationRequired(),
-//      spotFilterRequest.getPlaceType(),
-//      pageable
-//      );
-//    log.info("Search returned {} spots", spots.getNumberOfElements());
-//    return spots.map(spotMapper::toResponse);
-//  }
+  @Override
+  @Transactional(readOnly = true)
+  @Cacheable(
+    value = "spots",
+    key = "'filter::sleep:' + #spotFilterRequest.sleepingAllowed + " +
+      "'|eat:' + #spotFilterRequest.eatingAllowed + " +
+      "'|outlet:' + #spotFilterRequest.hasPowerOutlet + " +
+      "'|study:' + #spotFilterRequest.studyAllowed + " +
+      "'|entertainment:' + #spotFilterRequest.entertainment + " +
+      "'|reservation:' + #spotFilterRequest.reservationRequired + " +
+      "'|type:' + #spotFilterRequest.placeType + " +
+      "'|page:' + #page + '_size:' + #size",
+    cacheManager = "cacheManager"  // TTL 적용 가능한 CacheManager 사용
+  )
+  public PageResponseDto<SpotResponse> searchSpots(SpotFilterRequest spotFilterRequest, int page, int size) {
+
+    log.info("Searching spots with filters {} - page: {}, size: {}", spotFilterRequest, page, size);
+    Pageable pageable = PageRequest.of(page, size);
+    Page<Spot> spots = spotRepository.searchSpots(
+      spotFilterRequest.getSleepingAllowed(),
+      spotFilterRequest.getEatingAllowed(),
+      spotFilterRequest.getHasPowerOutlet(),
+      spotFilterRequest.getStudyAllowed(),
+      spotFilterRequest.getEntertainment(),
+      spotFilterRequest.getReservationRequired(),
+      spotFilterRequest.getPlaceType(),
+      pageable
+      );
+    log.info("Search returned {} spots", spots.getNumberOfElements());
+    return PageResponseDto.from(spots.map(spotMapper::toResponse));
+  }
 
   @Override
   @Transactional(readOnly = true)
@@ -89,6 +110,7 @@ public class SpotServiceImpl implements SpotService {
   }
 
   @Override
+  @CacheEvict(value = "spots", allEntries = true)
   public void create(Long memberId, SpotCreateRequest spotCreateRequest, List<MultipartFile> photos) {
     log.info("Creating new spot by memberId: {}", memberId);
     // todo : member 조회, Admin인지 확인.
@@ -136,8 +158,25 @@ public class SpotServiceImpl implements SpotService {
   }
 
   @Override
+  public List<SpotDownLoadResponse> downloadAllSpots() {
+    log.info("Fetching all spots from database");
+    List<Spot> spots = spotRepository.findAll();
+    log.info("Found {} spots", spots.size());
+    return spotMapper.toDownloadResponseList(spots);
+  }
+
+  @Override
   @Transactional(readOnly = true)
   public Spot getSpotProxy(Long spotId) {
     return spotRepository.getReferenceById(spotId); // DB 조회는 실제로 필드 접근할 때 발생
+  }
+
+  @Override
+  public String generateETag(List<SpotDownLoadResponse> spots) {
+    // 간단하게 JSON hashCode 기반
+    String json = spots.toString();
+    String eTag = "\"" + Integer.toHexString(json.hashCode()) + "\"";
+    log.info("Generated ETag={}", eTag);
+    return eTag;
   }
 }
