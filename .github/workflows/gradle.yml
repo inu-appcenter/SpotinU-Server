@@ -111,7 +111,7 @@ jobs:
             fi
 
             # docker-compose 실행 (백그라운드)
-            docker-compose -f /home/serverking/spotinu/docker-compose.prod.yml up -d spotinu-backend
+            docker-compose -f /home/serverking/spotinu/docker-compose.prod.yml up -d
 
             # 사용하지 않는 이미지/컨테이너 정리
             # docker system prune -af
