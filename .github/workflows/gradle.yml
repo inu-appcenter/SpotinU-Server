@@ -106,11 +106,11 @@ jobs:
             # 기존 컨테이너 안전하게 중지/제거
             if [ "$(docker ps -q -f name=spotinu-backend)" ]; then
               docker stop spotinu-backend
-              docker rm -f spotinu-backend
+#              docker rm -f spotinu-backend
             fi
 
             # docker-compose 실행 (백그라운드)
             docker-compose up -d spotinu-backend
 
             # 사용하지 않는 이미지/컨테이너 정리
-            docker system prune -af
+#            docker system prune -af
