@@ -28,8 +28,8 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-//  @Value("${app.origin}")
-//  private String origin;
+  @Value("${app.origin}")
+  private String origin;
 
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -85,7 +85,7 @@ public class SecurityConfig {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(List.of(
-//      origin,
+      origin,
 //      "https://2025-unithon-team-4-fe.vercel.app",
       "http://localhost:5173"
     )); // 혹은 "http://*"
