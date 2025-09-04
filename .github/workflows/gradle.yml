@@ -68,6 +68,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Create docker-compose.prod.yml
+        run: echo "${{ secrets.DOCKER_COMPOSE_PROD }}" > ./docker-compose.prod.yml
+
       # docker-compose.prod.yml 서버 전송
       - name: Upload docker-compose.prod.yml
         uses: appleboy/scp-action@master
