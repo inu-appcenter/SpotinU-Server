@@ -109,8 +109,8 @@ jobs:
               docker rm -f spotinu-backend
             fi
 
-            # docker-compose 실행 (백그라운드 + 빌드)
-            docker-compose up -d --build spotinu-backend
+            # docker-compose 실행 (백그라운드)
+            docker-compose up -d spotinu-backend
 
             # 사용하지 않는 이미지/컨테이너 정리
             docker system prune -af
