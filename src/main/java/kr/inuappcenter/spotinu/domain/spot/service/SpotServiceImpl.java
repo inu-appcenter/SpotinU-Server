@@ -127,8 +127,8 @@ public class SpotServiceImpl implements SpotService {
 
           SpotPhoto spotPhoto = SpotPhoto.builder()
             .url(photoUrl)
+            .thumbnail(index == 1)
             .orderIndex(index++)
-            .thumbnail(index == 2) // index++ 후라 2가 첫 사진
             .build();
 
           spot.addPhoto(spotPhoto);
