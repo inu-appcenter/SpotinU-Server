@@ -55,6 +55,8 @@ public class SpotServiceImpl implements SpotService {
     Pageable pageable = PageRequest.of(page, size);
     Page<Spot> spots = spotRepository.findAllWithPhotos(pageable);
 
+    spots.forEach(spot -> spot.getPhotos().size()); // Lazy 초기화
+
     log.info("Fetched {} spots", spots.getNumberOfElements());
     return PageResponseDto.from(spots.map(spotMapper::toResponse));
   }
@@ -87,6 +89,8 @@ public class SpotServiceImpl implements SpotService {
       spotFilterRequest.getPlaceType(),
       pageable
       );
+
+    spots.forEach(spot -> spot.getPhotos().size()); // Lazy 초기화
 
     log.info("Search returned {} spots", spots.getNumberOfElements());
     return PageResponseDto.from(spots.map(spotMapper::toResponse));
