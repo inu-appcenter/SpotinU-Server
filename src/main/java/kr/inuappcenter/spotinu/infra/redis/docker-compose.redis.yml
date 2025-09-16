@@ -1,0 +1,20 @@
+services:
+  redis:
+    hostname: redis
+    image: redis:7.4.2-alpine
+    container_name: spotinu-redis
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    networks:
+      - spotinu-network
+    volumes:
+      - ./infra/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - spotinu-redis:/data
+
+volumes:
+  spotinu-redis:
+
+networks:
+  spotinu-network:
+    external: true

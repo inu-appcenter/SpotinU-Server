@@ -75,7 +75,7 @@ cloud:
     credentials:
       access-key: ${AWS_S3_ACCESS_KEY}
       secret-key: ${AWS_S3_SECRET_KEY}
-#
-#default:
-#  profile:
-#    image: ${DEFAULT_PROFILE_IMAGE}
+
+default:
+  profile:
+    image: ${DEFAULT_PROFILE_IMAGE}
