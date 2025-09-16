@@ -91,11 +91,19 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   public void delete(CustomUserDetails userDetails, Long reviewId) {
-    Review review = reviewRepository.findById(reviewId)
-      .orElseThrow(() -> {
-        log.warn("Review not found for id: {}", reviewId);
-        return new ReviewException(REVIEW_NOT_FOUND);
-      });
+    Review review = reviewRepository.findByIdWithPhotos(reviewId);
+    if (review == null) {
+      throw new ReviewException(REVIEW_NOT_FOUND);
+    }
+
+    review.getPhotos().forEach(photo -> {
+      try {
+        s3FileStorageService.deleteImage(photo.getUrl());
+        log.info("Deleted photo from S3: {}", photo.getUrl());
+      } catch (Exception e) {
+        log.error("Failed to delete photo from S3: {}", photo.getUrl(), e);
+      }
+    });
 
     // 관리자면 바로 삭제 허용
     if (!(userDetails.getRole() == ADMIN ||
