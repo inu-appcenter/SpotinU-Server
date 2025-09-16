@@ -53,7 +53,8 @@ public class SpotServiceImpl implements SpotService {
 
     log.info("Fetching all spots - page: {}, size: {}", page, size);
     Pageable pageable = PageRequest.of(page, size);
-    Page<Spot> spots = spotRepository.findAll(pageable);
+    Page<Spot> spots = spotRepository.findAllWithPhotos(pageable);
+
     log.info("Fetched {} spots", spots.getNumberOfElements());
     return PageResponseDto.from(spots.map(spotMapper::toResponse));
   }
@@ -86,6 +87,7 @@ public class SpotServiceImpl implements SpotService {
       spotFilterRequest.getPlaceType(),
       pageable
       );
+
     log.info("Search returned {} spots", spots.getNumberOfElements());
     return PageResponseDto.from(spots.map(spotMapper::toResponse));
   }

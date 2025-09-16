@@ -21,6 +21,24 @@ public class SpotRepositoryImpl implements SpotRepositoryCustom {
   private final QSpot spot = QSpot.spot;
 
   @Override
+  public Page<Spot> findAllWithPhotos(Pageable pageable) {
+    List<Spot> results = queryFactory
+      .selectFrom(spot)
+      .leftJoin(spot.photos).fetchJoin()
+      .offset(pageable.getOffset())
+      .limit(pageable.getPageSize())
+      .fetch();
+
+    Long total = queryFactory
+      .select(spot.count())
+      .from(spot)
+      .fetchOne();
+
+    long totalCount = total != null ? total : 0L;
+    return new PageImpl<>(results, pageable, totalCount);
+  }
+
+  @Override
   public Page<Spot> searchSpots(Boolean sleepingAllowed,
                                 Boolean eatingAllowed,
                                 Boolean hasPowerOutlet,
@@ -32,6 +50,7 @@ public class SpotRepositoryImpl implements SpotRepositoryCustom {
 
     List<Spot> results = queryFactory
       .selectFrom(spot)
+      .leftJoin(spot.photos).fetchJoin() // 사진 함께 조회
       .where(
         sleepingAllowedEq(sleepingAllowed),
         eatingAllowedEq(eatingAllowed),
