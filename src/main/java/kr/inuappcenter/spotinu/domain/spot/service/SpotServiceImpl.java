@@ -55,7 +55,7 @@ public class SpotServiceImpl implements SpotService {
     Pageable pageable = PageRequest.of(page, size);
     Page<Spot> spots = spotRepository.findAllWithPhotos(pageable);
 
-    spots.forEach(spot -> spot.getPhotos().size()); // Lazy 초기화
+//    spots.forEach(spot -> spot.getPhotos().size()); // Lazy 초기화
 
     log.info("Fetched {} spots", spots.getNumberOfElements());
     return PageResponseDto.from(spots.map(spotMapper::toResponse));
@@ -90,7 +90,7 @@ public class SpotServiceImpl implements SpotService {
       pageable
       );
 
-    spots.forEach(spot -> spot.getPhotos().size()); // Lazy 초기화
+//    spots.forEach(spot -> spot.getPhotos().size()); // Lazy 초기화
 
     log.info("Search returned {} spots", spots.getNumberOfElements());
     return PageResponseDto.from(spots.map(spotMapper::toResponse));
@@ -153,11 +153,19 @@ public class SpotServiceImpl implements SpotService {
 
   @Override
   public void delete(Long spotId) {
-    Spot spot = spotRepository.findById(spotId)
-      .orElseThrow(() -> {
-        log.warn("Spot not found for id: {}", spotId);
-        return new SpotException(SPOT_NOT_FOUND);
-      });
+    Spot spot = spotRepository.findByIdWithPhotos(spotId);
+    if (spot == null) {
+      throw new SpotException(SPOT_NOT_FOUND);
+    }
+
+    spot.getPhotos().forEach(photo -> {
+      try {
+        s3FileStorageService.deleteImage(photo.getUrl());
+        log.info("Deleted photo from S3: {}", photo.getUrl());
+      } catch (Exception e) {
+        log.error("Failed to delete photo from S3: {}", photo.getUrl(), e);
+      }
+    });
 
     spotRepository.delete(spot);
     log.info("Spot deleted successfully: {}", spot.getName());

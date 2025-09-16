@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
  * JPA 기본 메서드 외에, 복잡한 검색 조건이 있는 쿼리
  */
 public interface SpotRepositoryCustom {
+  Spot findByIdWithPhotos(Long id);
   Page<Spot> findAllWithPhotos(Pageable pageable);
   Page<Spot> searchSpots(Boolean sleepingAllowed,
                          Boolean eatingAllowed,

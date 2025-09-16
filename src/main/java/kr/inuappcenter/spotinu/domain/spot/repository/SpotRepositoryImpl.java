@@ -21,6 +21,15 @@ public class SpotRepositoryImpl implements SpotRepositoryCustom {
   private final QSpot spot = QSpot.spot;
 
   @Override
+  public Spot findByIdWithPhotos(Long id) {
+    return queryFactory
+      .selectFrom(spot)
+      .leftJoin(spot.photos).fetchJoin()
+      .where(spot.id.eq(id))
+      .fetchOne();
+  }
+
+  @Override
   public Page<Spot> findAllWithPhotos(Pageable pageable) {
     List<Spot> results = queryFactory
       .selectFrom(spot)

@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import kr.inuappcenter.spotinu.domain.common.storage.exception.StorageException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import static kr.inuappcenter.spotinu.domain.common.storage.exception.StorageErrorCode.S3_DELETE_FAIL;
 import static kr.inuappcenter.spotinu.domain.common.storage.exception.StorageErrorCode.S3_UPLOAD_FAIL;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class S3FileStorageServiceImpl implements S3FileStorageService {
@@ -42,11 +44,15 @@ public class S3FileStorageServiceImpl implements S3FileStorageService {
 
   @Override
   public void deleteImage(String imageUrl) {
+
+    String key = extractKeyFromUrl(imageUrl);
+
     try {
       // imageUrl에서 key 추출 (예: https://bucket.s3.../images/abc.jpg → images/abc.jpg)
-      String key = extractKeyFromUrl(imageUrl);
       amazonS3.deleteObject(bucket, key);
+      log.info("Deleted S3 object successfully. key={}", key);
     } catch (Exception e) {
+      log.error("Failed to delete S3 object. key={}", key, e);
       throw new StorageException(S3_DELETE_FAIL);
     }
   }
