@@ -37,5 +37,9 @@ out/
 .vscode/
 
 .env
+
+## Prod ###
 src/main/resources/application-prod.yml
 docker-compose.prod.yaml
+src/main/java/kr/inuappcenter/spotinu/infra/mysql/docker-compose.mysql.yml
+src/main/java/kr/inuappcenter/spotinu/infra/redis/docker-compose.redis.yml

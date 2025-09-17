@@ -6,7 +6,9 @@ import kr.inuappcenter.spotinu.domain.member.entity.CustomUserDetails;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotCreateRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.request.SpotFilterRequest;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDetailResponse;
+import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotDownLoadResponse;
 import kr.inuappcenter.spotinu.domain.spot.dto.response.SpotResponse;
+import kr.inuappcenter.spotinu.global.response.PageResponseDto;
 import kr.inuappcenter.spotinu.global.response.ResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +28,18 @@ public interface SpotControllerSpecification {
    * 전체 장소 목록 조회 (페이징)
    */
   @GetMapping
-  ResponseEntity<ResponseDto<Page<SpotResponse>>> getAllSpots(
+  ResponseEntity<ResponseDto<PageResponseDto<SpotResponse>>> getAllSpots(
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size);
 
-//  /**
-//   * 필터 조건으로 장소 검색
-//   */
-//  @PostMapping("/search")
-//  ResponseEntity<ResponseDto<Page<SpotResponse>>> searchSpots(
-//    @Valid @RequestBody SpotFilterRequest spotFilterRequest,
-//    @RequestParam(defaultValue = "0") int page,
-//    @RequestParam(defaultValue = "10") int size);
+  /**
+   * 필터 조건으로 장소 검색
+   */
+  @PostMapping("/search")
+  ResponseEntity<ResponseDto<PageResponseDto<SpotResponse>>> searchSpots(
+    @Valid @RequestBody SpotFilterRequest spotFilterRequest,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size);
 
   /**
    * 특정 장소 상세 조회
@@ -73,4 +75,15 @@ public interface SpotControllerSpecification {
   ResponseEntity<ResponseDto<Void>> delete(
     @AuthenticationPrincipal CustomUserDetails userDetails,
     @PathVariable Long spotId);
+
+  /**
+   * 장소 다운로드 - 로컬 캐시
+   * @return
+   */
+  @GetMapping("/download")
+  ResponseEntity<ResponseDto<List<SpotDownLoadResponse>>> downloadAllSpots(
+    @RequestHeader(value = "If-None-Match", required = false) String ifNoneMatch
+  );
+
+
 }
